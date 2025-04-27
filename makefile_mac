@@ -1,0 +1,40 @@
+############################################################
+##
+##    Rosetta Shell: makefile [направљен 18.06.2023.]
+##    Copyright © 2023 Љубомир Мићић
+##    Сва права су заштићена.
+##
+############################################################
+
+# Rosetta Shell
+APP_NAME = Rosetta Shell
+CXX = g++
+FLAGS = -Wall -Wextra -pedantic -std=c++11
+SOURCES = main.cpp
+OBJECTS = $(SOURCES:.cpp=.o)
+OS = MAC
+# Debug ili Release
+TYPE = Release
+# EXECUTABLE = "bin/$(TYPE)/$(APP_NAME)"
+
+ifeq ($(OS), MAC)
+	EXECUTABLE = "bin/$(TYPE)/$(APP_NAME)"
+else ifeq ($(OS), WIN)
+	# CXX = x86_64-w64-mingw32-g++
+	EXECUTABLE = "bin/$(TYPE)/$(APP_NAME).exe"
+else
+	$(error "Unsupported OS. Use 'MAC' or 'WIN'.")
+endif
+
+$(APP_NAME): $(OBJECTS)
+	@echo "Formiranje ..."
+	mkdir -p bin
+	mkdir -p bin/$(TYPE)
+	$(CXX) $(FLAGS) $(OBJECTS) -o $(EXECUTABLE)
+
+%.o: %.cpp
+	$(CXX) $(FLAGS) -c $< -o $@
+
+clean:
+	@echo "Ciscenje ..."
+	rm -f $(EXECUTABLE)
